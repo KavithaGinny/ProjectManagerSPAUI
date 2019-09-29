@@ -1,8 +1,8 @@
 export class Users {
-    UserId: number;
-    FirstName: string;
-    LastName: string;
-    EmployeeId: string;
+    userID: number;
+    firstName: string;
+    lastName: string;
+    employeeID: string;
   }
   
   

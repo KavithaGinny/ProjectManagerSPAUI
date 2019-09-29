@@ -1,9 +1,9 @@
 export class Project {
-    ProjectId: number;
-    ProjectDescription: string;
-    StartDate: string;
-    EndDate: string;
-    Priority: number;
-    ManagerUserId: number;
+    projectID: number;
+    projectName: string;
+    startDate: string;
+    endDate: string;
+    priority: number;
+    managerUserId: number;
   }
   

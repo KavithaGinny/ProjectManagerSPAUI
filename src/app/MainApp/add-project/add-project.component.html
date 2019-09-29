@@ -1,23 +1,24 @@
+<div style="width:1000px;margin:0 auto">
 <p>
-  Add Project works!
+  Add Project!
 </p>
 <h6 class="alert alert-danger" *ngIf="!IsformValid">
-  All the below fields are mandatory..!
+  All the below fields are mandatory!
 </h6>
 <h6 class="alert alert-danger" *ngIf="!IsStartDateGreater">
-  Start date should not be greaterthan End date..!
+  Start date should not be greater than End date!
 </h6>
 <h6 class="alert alert-success" *ngIf="IsAddedSuccessFully">
-  Project added successfully...
+  Project added successfully!
 </h6>
 <h6 class="alert alert-success" *ngIf="IsUpdatedSuccessFully">
-  Project updated successfully...
+  Project updated successfully!
 </h6>
 <h6 class="alert alert-warning" *ngIf="IsDeletedSuccessFully">
-  Project suspended successfully...
+  Project suspended successfully!
 </h6>
 <form #myForm="ngForm" class="well form-horizontal">
-  <table class="table table-striped" style="background-color:lightcyan;">
+  <table class="table table-striped" style="background-color: #f6f8d4;">
     <tbody>
       <tr>
         <td colspan="1">
@@ -28,7 +29,7 @@
                 <div class="input-group">
                   <input
                     id="ProjectId"
-                    [(ngModel)]="ProjectId"
+                    [(ngModel)]="projectID"
                     name="ProjectId"
                     class="form-control"
                     readonly
@@ -44,7 +45,7 @@
                 <div class="input-group">
                   <input
                     id="ProjectDescription"
-                    [(ngModel)]="ProjectDescription"
+                    [(ngModel)]="projectName"
                     name="ProjectDescription"
                     class="form-control"
                     placeholder="Project Description"
@@ -75,7 +76,7 @@
                     id="StartDate"
                     [disabled]="!Ischecked"
                     name="StartDate"
-                    [ngModel]="StartDate | date: 'yyyy-MM-dd'"
+                    [ngModel]="startDate | date: 'yyyy-MM-dd'"
                     (ngModelChange)="StartDate = $event"
                     class="form-control"
                     required="true"
@@ -93,7 +94,7 @@
                     id="EndDate"
                     [disabled]="!Ischecked"
                     name="EndDate"
-                    [ngModel]="EndDate | date: 'yyyy-MM-dd'"
+                    [ngModel]="endDate | date: 'yyyy-MM-dd'"
                     (ngModelChange)="EndDate = $event"
                     class="form-control"
                     required="true"
@@ -111,11 +112,12 @@
                   <input
                     id="Priority"
                     #rangeval
-                    [(ngModel)]="Priority"
+                    [(ngModel)]="priority"
                     name="Priority"
                     class="form-control-range"
                     required="true"
                     type="range"
+                    value=""
                     min="0"
                     max="30"
                   />
@@ -128,7 +130,7 @@
                 <div class="input-group">
                   <input
                     id="ManagerUserId"
-                    [(ngModel)]="ManagerUserId"
+                    [(ngModel)]="managerUserId"
                     name="ManagerUserId"
                     class="form-control"
                     required="true"
@@ -187,7 +189,7 @@
   </table>
   <hr />
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="input-group">
         <input
           id="txtSearchProject"
@@ -203,6 +205,8 @@
     </div>
     <div class="col-md-2">
       <label class="control-label" style="padding-right:10px;">Sort By: </label>
+    </div>
+    <div class="col-md-2">
       <button class="btn btn-secondary" (click)="StartDateSort()">
         Start Date
       </button>
@@ -235,12 +239,12 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of listProjects; trackBy: trackProject">
-        <td>{{ item.ProjectId }}</td>
-        <td>{{ item.ProjectDescription }}</td>
-        <td>{{ item.Priority }}</td>
-        <td>{{ item.StartDate | date: "MM-dd-yyyy" }}</td>
-        <td>{{ item.EndDate | date: "MM-dd-yyyy" }}</td>
-        <td>{{ item.ManagerUserId }}</td>
+        <td>{{ item.projectID }}</td>
+        <td>{{ item.projectName }}</td>
+        <td>{{ item.priority }}</td>
+        <td>{{ item.startDate | date: "MM-dd-yyyy" }}</td>
+        <td>{{ item.endDate | date: "MM-dd-yyyy" }}</td>
+        <td>{{ item.managerUserId }}</td>
         <td style="padding-left:0;padding-right:0; margin: 0%">
           <button class="btn btn-secondary" (click)="EditProjectBind(item)">
             <i class="fa fa-refresh" aria-hidden="true"></i> Update
@@ -249,7 +253,7 @@
         <td style="padding-left:0;padding-right:0;margin: 0%">
           <button
             class="btn btn-danger"
-            (click)="DeleteProject(item.ProjectId)"
+            (click)="DeleteProject(item.ProjectID)"
             (blur)="LoadProjectGrid()"
           >
           <i class="fa fa-pause" aria-hidden="true"></i> Suspend
@@ -303,15 +307,15 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of listManager; trackBy: trackUser">
-          <td>{{ item.UserId }}</td>
-          <td>{{ item.FirstName }}</td>
-          <td>{{ item.LastName }}</td>
-          <td>{{ item.EmployeeId }}</td>
+          <td>{{ item.userID }}</td>
+          <td>{{ item.firstName }}</td>
+          <td>{{ item.lastName }}</td>
+          <td>{{ item.employeeID }}</td>
           <td style="padding-left:0;padding-right:0; margin: 0%">
             <button
               style="padding:0px;"
               class="btn btn-success"
-              (click)="SelectManger(item.UserId)"
+              (click)="SelectManger(item.userID)"
             >
               Select
             </button>
@@ -322,3 +326,4 @@
   </div>
 </ng-template>
 
+</div>

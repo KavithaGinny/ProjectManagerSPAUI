@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgModule,OnInit } from '@angular/core';
 import { SharedService } from 'src/app/Services/shared.service';
 import { Users } from 'src/app/Modules/users';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
@@ -20,10 +20,10 @@ import { map, filter } from 'rxjs/operators';
 export class AddUserComponent implements OnInit {
 
   public insertResult: any;
-  public UserId: number;
-  public FirstName: string;
-  public LastName: string;
-  public EmployeeId: string;
+  public userID: number;
+  public firstName: string;
+  public lastName: string;
+  public employeeID: string;
   public IsformValid = true;
   public IsAddedSuccessFully = false;
   public IsDeletedSuccessFully = false;
@@ -40,21 +40,21 @@ export class AddUserComponent implements OnInit {
   }
   AddNewUser(form: NgForm): void {
     const Userdetails: Users = {
-      UserId: 0,
-      FirstName: this.FirstName,
-      LastName: this.LastName,
-      EmployeeId: this.EmployeeId
+      userID: 0,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      employeeID: this.employeeID
     };
     this.IsEdit = false;
     this.IsDeletedSuccessFully = false;
     this.IsUpdatedSuccessFully = false;
     if (
-      Userdetails.FirstName === undefined ||
-      Userdetails.LastName === undefined ||
-      Userdetails.EmployeeId === undefined ||
-      Userdetails.FirstName === '' ||
-      Userdetails.LastName === '' ||
-      Userdetails.EmployeeId === ''
+      Userdetails.firstName === undefined ||
+      Userdetails.lastName === undefined ||
+      Userdetails.employeeID === undefined ||
+      Userdetails.firstName === '' ||
+      Userdetails.lastName === '' ||
+      Userdetails.employeeID === ''
     ) {
       this.IsformValid = false;
       this.IsAddedSuccessFully = false;
@@ -75,10 +75,10 @@ export class AddUserComponent implements OnInit {
     this.IsUpdatedSuccessFully = false;
     this.IsformValid = true;
     this.IsEdit = true;
-    this.UserId = user.UserId;
-    this.FirstName = user.FirstName;
-    this.LastName = user.LastName;
-    this.EmployeeId = user.EmployeeId;
+    this.userID = user.userID;
+    this.firstName = user.firstName;
+    this.lastName = user.lastName;
+    this.employeeID = user.employeeID;
     window.scroll(0, 0);
   }
   ResetUserForm(form: NgForm): void {
@@ -103,10 +103,10 @@ export class AddUserComponent implements OnInit {
           data =>
             (this.list = data.filter(
               item =>
-                item.FirstName.toUpperCase() === Searchdetail.toUpperCase() ||
-                item.LastName.toUpperCase() === Searchdetail.toUpperCase() ||
-                item.EmployeeId.toUpperCase() === Searchdetail.toUpperCase() ||
-                item.UserId.toString() === Searchdetail
+                item.firstName.toUpperCase() === Searchdetail.toUpperCase() ||
+                item.lastName.toUpperCase() === Searchdetail.toUpperCase() ||
+                item.employeeID.toUpperCase() === Searchdetail.toUpperCase() ||
+                item.userID.toString() === Searchdetail
             ))
         );
     } else {
@@ -118,9 +118,9 @@ export class AddUserComponent implements OnInit {
     this._service.GetAllUsers().subscribe(
       data =>
         (this.list = data.sort((a, b) => {
-          if (a.FirstName < b.FirstName) {
+          if (a.firstName < b.firstName) {
             return -1;
-          } else if (a.FirstName > b.FirstName) {
+          } else if (a.firstName > b.firstName) {
             return 1;
           } else {
             return 0;
@@ -133,9 +133,9 @@ export class AddUserComponent implements OnInit {
     this._service.GetAllUsers().subscribe(
       data =>
         (this.list = data.sort((a, b) => {
-          if (a.LastName < b.LastName) {
+          if (a.lastName < b.lastName) {
             return -1;
-          } else if (a.LastName > b.LastName) {
+          } else if (a.lastName > b.lastName) {
             return 1;
           } else {
             return 0;
@@ -147,9 +147,9 @@ export class AddUserComponent implements OnInit {
     this._service.GetAllUsers().subscribe(
       data =>
         (this.list = data.sort((a, b) => {
-          if (a.UserId < b.UserId) {
+          if (a.userID < b.userID) {
             return -1;
-          } else if (a.UserId > b.UserId) {
+          } else if (a.userID > b.userID) {
             return 1;
           } else {
             return 0;
@@ -157,9 +157,9 @@ export class AddUserComponent implements OnInit {
         }))
     );
   }
-  DeleteUser(UserId: number): void {
+  DeleteUser(userID: number): void {
     let DeleteResult: any;
-    this._service.DeleteUser(UserId).subscribe(data => (DeleteResult = data));
+    this._service.DeleteUser(userID).subscribe(data => (DeleteResult = data));
     this.IsDeletedSuccessFully = true;
     this.IsUpdatedSuccessFully = false;
     this.IsAddedSuccessFully = false;
@@ -170,25 +170,25 @@ export class AddUserComponent implements OnInit {
   UpdateUser(): void {
     let updateResult: any;
     const Userdetails: Users = {
-      UserId: this.UserId,
-      FirstName: this.FirstName,
-      LastName: this.LastName,
-      EmployeeId: this.EmployeeId
+      userID: this.userID,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      employeeID: this.employeeID
     };
     if (
-      Userdetails.FirstName === undefined ||
-      Userdetails.LastName === undefined ||
-      Userdetails.EmployeeId === undefined ||
-      Userdetails.FirstName === '' ||
-      Userdetails.LastName === '' ||
-      Userdetails.EmployeeId === ''
+      Userdetails.firstName === undefined ||
+      Userdetails.lastName === undefined ||
+      Userdetails.employeeID === undefined ||
+      Userdetails.firstName === '' ||
+      Userdetails.lastName === '' ||
+      Userdetails.employeeID === ''
     ) {
       this.IsformValid = false;
       this.IsUpdatedSuccessFully = false;
     } else {
       this.IsformValid = true;
       this._service
-        .UpdateUser(Userdetails.UserId, Userdetails)
+        .UpdateUser(Userdetails.userID, Userdetails)
         .subscribe(data => (updateResult = data));
       this.IsUpdatedSuccessFully = true;
       this.IsDeletedSuccessFully = false;

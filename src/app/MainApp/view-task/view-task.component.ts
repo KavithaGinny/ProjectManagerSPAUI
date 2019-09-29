@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TaskInformation } from '../../Modules/task-information';
+import { Task } from '../../Modules/task-information';
 import { SharedService } from 'src/app/Services/shared.service';
 import { DatePipe } from '@angular/common';
 import { map, filter } from 'rxjs/operators';
@@ -13,11 +13,11 @@ import { NgModule } from '@angular/core';
 @Component({
   selector: 'app-view-task',
   templateUrl: './view-task.component.html',
-  styleUrls: ['./view-task.component.scss']
+  styleUrls: ['./view-task.component.css']
 })
 export class ViewTaskComponent implements OnInit {
 
-  tasks: TaskInformation[];
+  tasks: Task[];
   constructor(private _service: SharedService, public datepipe: DatePipe) {
     this._service.GetAllTask().subscribe(data => this.tasks = data);
 
@@ -34,10 +34,10 @@ export class ViewTaskComponent implements OnInit {
     this._service.GetAllTask().subscribe(data => this.tasks = data);
     alert('Task has been deleted successfully..!');
   }
-  CompleteTaskFlagchange(Item: TaskInformation): void {
+  CompleteTaskFlagchange(Item: Task): void {
     let updateResult: any;
-    Item.IsTaskCompleted = 1;
-    this._service.CompleteTaskFlagUpdate(Item.TaskId,Item).subscribe(data => updateResult = data);
+    Item.status = 1;
+    this._service.CompleteTaskFlagUpdate(Item.taskID,Item).subscribe(data => updateResult = data);
     this._service.GetAllTask().subscribe(data => this.tasks = data);
     alert('Task has been marked as End..!');
   }
@@ -49,7 +49,7 @@ export class ViewTaskComponent implements OnInit {
   TaskFilter(taskdetail: string): void {
     if (taskdetail !== undefined && taskdetail.length !== 0) {
       // tslint:disable-next-line:max-line-length
-      this._service.GetAllTask().subscribe(data => this.tasks = data.filter(item => item.TaskDescription.toUpperCase() === taskdetail.toUpperCase()));
+      this._service.GetAllTask().subscribe(data => this.tasks = data.filter(item => item.taskName.toUpperCase() === taskdetail.toUpperCase()));
     } else {
       this._service.GetAllTask().subscribe(data => this.tasks = data);
     }
@@ -57,7 +57,7 @@ export class ViewTaskComponent implements OnInit {
   }
   ParentTaskFilter(Parenttaskdetail: number): void {
     if (Parenttaskdetail !== undefined && Parenttaskdetail !== 0) {
-      this._service.GetAllTask().subscribe(data => this.tasks = data.filter(item => item.ParentId === Parenttaskdetail));
+      this._service.GetAllTask().subscribe(data => this.tasks = data.filter(item => item.parentID === Parenttaskdetail));
     } else {
       this._service.GetAllTask().subscribe(data => this.tasks = data);
     }
@@ -67,7 +67,7 @@ export class ViewTaskComponent implements OnInit {
   PriorityTaskFilter(taskPriority: number): void {
     if (taskPriority !== undefined && taskPriority !== 0) {
 
-      this._service.GetAllTask().subscribe(data => this.tasks = data.filter(item => item.Priority === taskPriority));
+      this._service.GetAllTask().subscribe(data => this.tasks = data.filter(item => item.priority === taskPriority));
     } else {
       this._service.GetAllTask().subscribe(data => this.tasks = data);
     }
@@ -77,7 +77,7 @@ export class ViewTaskComponent implements OnInit {
     if (StartDate !== undefined && StartDate.length !== 0) {
 
       // tslint:disable-next-line:max-line-length
-      this._service.GetAllTask().subscribe(data => this.tasks = data.filter(item => this.datepipe.transform(item.StartDate, 'yyyy-MM-dd') === this.datepipe.transform(StartDate, 'yyyy-MM-dd')));
+      this._service.GetAllTask().subscribe(data => this.tasks = data.filter(item => this.datepipe.transform(item.startDate, 'yyyy-MM-dd') > this.datepipe.transform(StartDate, 'yyyy-MM-dd')));
     } else {
       this._service.GetAllTask().subscribe(data => this.tasks = data);
     }
@@ -85,7 +85,7 @@ export class ViewTaskComponent implements OnInit {
   EndDateTaskFilter(endDate: string): void {
     if (endDate !== undefined && endDate.length !== 0) {
       // tslint:disable-next-line:max-line-length
-      this._service.GetAllTask().subscribe(data => this.tasks = data.filter(item => this.datepipe.transform(item.EndDate, 'yyyy-MM-dd') === this.datepipe.transform(endDate, 'yyyy-MM-dd')));
+      this._service.GetAllTask().subscribe(data => this.tasks = data.filter(item => this.datepipe.transform(item.endDate, 'yyyy-MM-dd') < this.datepipe.transform(endDate, 'yyyy-MM-dd')));
     } else {
       this._service.GetAllTask().subscribe(data => this.tasks = data);
     }

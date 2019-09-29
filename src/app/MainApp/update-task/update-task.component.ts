@@ -1,5 +1,5 @@
 import { Component, OnInit, NgModule, TemplateRef } from '@angular/core';
-import { TaskInformation } from '../../Modules/task-information';
+import { Task } from '../../Modules/task-information';
 import { SharedService } from 'src/app/Services/shared.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -17,22 +17,22 @@ import { Project } from 'src/app/Modules/project';
 @Component({
   selector: 'app-update-task',
   templateUrl: './update-task.component.html',
-  styleUrls: ['./update-task.component.scss']
+  styleUrls: ['./update-task.component.css']
 })
 export class UpdateTaskComponent implements OnInit {
   ProjectmodalRef: BsModalRef;
   ParentTaskmodalRef: BsModalRef;
   UsermodalRef: BsModalRef;
   public updateResult: any;
-  public TaskId: number;
+  public taskID: number;
   public TaskInformation: string;
-  public ParentId: number;
-  public StartDate: string;
-  public EndDate: string;
-  public Priority: number;
-  public TaskStatus: string;
-  public UserId: number;
-  public ProjectId: number;
+  public parentID: number;
+  public startDate: string;
+  public endDate: string;
+  public priority: number;
+  public taskStatus: string;
+  public userID: number;
+  public projectID: number;
 
   public IsformValid = true;
   public IsUpdatedSuccessFully = false;
@@ -45,7 +45,7 @@ export class UpdateTaskComponent implements OnInit {
   listProjects: Project[];
   listParentTask: ParentTask[];
   listUser: Users[];
-  TaskDescription: string;
+  taskName: string;
   // tslint:disable-next-line:max-line-length
   constructor(private _service: SharedService, private route: ActivatedRoute, private ProjectmodalServ: BsModalService, private ParentTaskmodalServ: BsModalService, private UsermodalServ: BsModalService, public datepipe: DatePipe) {
     this._service.GetAllProjects().subscribe(data => this.listProjects = data);
@@ -55,14 +55,14 @@ export class UpdateTaskComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('taskid');
     // tslint:disable-next-line:radix
     this._service.GetTask(parseInt(id)).subscribe(data => {
-    this.TaskId = data.TaskId;
-    this.TaskDescription = data.TaskDescription;
-    this.Priority = data.Priority;
-   this.StartDate = data.StartDate;
-    this.EndDate = data.EndDate;
-    this.ParentId = data.ParentId;
-  this.ProjectId = data.ProjectId;
-   this.UserId = data.UserId; });
+    this.taskID = data.taskID;
+    this.taskName = data.taskName;
+    this.priority = data.priority;
+   this.startDate = data.startDate;
+    this.endDate = data.endDate;
+    this.parentID = data.parentID;
+  this.projectID = data.projectID;
+   this.userID = data.userID; });
 
 
    }
@@ -72,26 +72,26 @@ export class UpdateTaskComponent implements OnInit {
 
   UpdateTask(): void {
   this.IsStartDateGreater = false;
-  const Taskdetails: TaskInformation = {TaskId: this.TaskId,
-  ParentId: this.ParentId,
-  TaskDescription: this.TaskDescription,
-  StartDate: this.StartDate,
-  EndDate: this.EndDate,
-  Priority: this.Priority,
-  IsTaskCompleted: 0,
-  ProjectId : this.ProjectId,
-  UserId: this.UserId};
+  const Taskdetails: Task = {taskID: this.taskID,
+  parentID: this.parentID,
+  taskName: this.taskName,
+  startDate: this.startDate,
+  endDate: this.endDate,
+  priority: this.priority,
+  status: 0,
+  projectID : this.projectID,
+  userID: this.userID};
 
 // tslint:disable-next-line:max-line-length
-if (Taskdetails.TaskDescription === undefined || Taskdetails.TaskDescription === '' || Taskdetails.StartDate === undefined || Taskdetails.EndDate === undefined) {
+if (Taskdetails.taskName === undefined || Taskdetails.taskName === '' || Taskdetails.startDate === undefined || Taskdetails.endDate === undefined) {
   this.IsformValid = false;
-} else if (Date.parse(Taskdetails.StartDate) > Date.parse(Taskdetails.EndDate)) {this.IsUpdatedSuccessFully = false;
+} else if (Date.parse(Taskdetails.startDate) > Date.parse(Taskdetails.endDate)) {this.IsUpdatedSuccessFully = false;
   this.IsformValid = true;
   this.IsStartDateGreater = true;
 } else {
   this.IsformValid = true;
   this.IsStartDateGreater = false;
-this._service.UpdateTask(Taskdetails.TaskId, Taskdetails).subscribe(data => this.updateResult = data);
+this._service.UpdateTask(Taskdetails.taskID, Taskdetails).subscribe(data => this.updateResult = data);
 this.IsUpdatedSuccessFully = true;
 
 }
@@ -101,12 +101,12 @@ window.scroll(0, 0);
 
 
 SelectProject(ProjectId: number): void {
-    this.ProjectId = ProjectId;
+    this.projectID = ProjectId;
     this.IsProjectSelected = true;
   }
 
   SelectParentTask(ParentId: number): void {
-    this.ParentId = ParentId;
+    this.parentID = ParentId;
     this.IsParentTaskSelected = true;
 
   }
@@ -119,8 +119,8 @@ this.ParentTaskmodalRef = this.ParentTaskmodalServ.show(tmpParentTask);
   SearchProjectFilter(projectSearchCriteria: string): void {
     if (projectSearchCriteria !== undefined && projectSearchCriteria.length !== 0) {
   this._service.GetAllProjects().subscribe(data => this.listProjects = data.filter(item =>
-   item.ProjectId.toString() === projectSearchCriteria || item.ProjectDescription.toUpperCase() === projectSearchCriteria.toUpperCase()
-  || item.Priority.toString() === projectSearchCriteria || item.ManagerUserId.toString() === projectSearchCriteria));
+   item.projectID.toString() === projectSearchCriteria || item.projectName.toUpperCase() === projectSearchCriteria.toUpperCase()
+  || item.priority.toString() === projectSearchCriteria || item.managerUserId.toString() === projectSearchCriteria));
 
     } else {
       this._service.GetAllProjects().subscribe(data => this.listProjects = data);
@@ -130,7 +130,7 @@ this.ParentTaskmodalRef = this.ParentTaskmodalServ.show(tmpParentTask);
   SearchParentTaskFilter(ParentTaskSearchCriteria: string): void {
     if (ParentTaskSearchCriteria !== undefined && ParentTaskSearchCriteria.length !== 0) {
   // tslint:disable-next-line:max-line-length
-  this._service.GetAllParentTask().subscribe(data => this.listParentTask = data.filter(item => item.ParentId.toString() === ParentTaskSearchCriteria || item.ParentTask1.toUpperCase() === ParentTaskSearchCriteria.toUpperCase()));
+  this._service.GetAllParentTask().subscribe(data => this.listParentTask = data.filter(item => item.parentID.toString() === ParentTaskSearchCriteria || item.parentTaskName.toUpperCase() === ParentTaskSearchCriteria.toUpperCase()));
 
     } else {
       this._service.GetAllParentTask().subscribe(data => this.listParentTask = data);
@@ -139,27 +139,27 @@ this.ParentTaskmodalRef = this.ParentTaskmodalServ.show(tmpParentTask);
   }
   trackParentTask(index: number, item: any) {
 
-    return item ? item.ParentId : undefined;
+    return item ? item.parentID : undefined;
 
   }
   trackProject(index: number, item: any) {
 
-    return item ? item.ProjectId : undefined;
+    return item ? item.projectID : undefined;
 
   }
   SelectUser(UserId: number): void {
-    this.UserId = UserId;
+    this.userID = UserId;
     this.IsUserSelected = true;
   }
   trackUser(index: number, item: any) {
 
-    return item ? item.UserId : undefined;
+    return item ? item.userID : undefined;
 
   }
   SearchUserFilter(Searchdetail: string): void {
     if (Searchdetail !== undefined && Searchdetail.length !== 0) {
-  this._service.GetAllUsers().subscribe(data => this.listUser = data.filter(item => item.FirstName.toUpperCase() === Searchdetail.toUpperCase() || item.LastName.toUpperCase() === Searchdetail.toUpperCase()
-  || item.EmployeeId.toUpperCase() === Searchdetail.toUpperCase() || item.UserId.toString() === Searchdetail ));
+  this._service.GetAllUsers().subscribe(data => this.listUser = data.filter(item => item.firstName.toUpperCase() === Searchdetail.toUpperCase() || item.lastName.toUpperCase() === Searchdetail.toUpperCase()
+  || item.employeeID.toUpperCase() === Searchdetail.toUpperCase() || item.userID.toString() === Searchdetail ));
 
     } else {
       this._service.GetAllUsers().subscribe(data => this.listUser = data);

@@ -17,17 +17,17 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-add-project',
   templateUrl: './add-project.component.html',
-  styleUrls: ['./add-project.component.scss']
+  styleUrls: ['./add-project.component.css']
 })
 export class AddProjectComponent implements OnInit {
   // Project related Variables Start
   listProjects: Project[];
-  public ProjectId: number;
-  public ProjectDescription: string;
-  public StartDate: string;
-  public EndDate: string;
-  public Priority: number;
-  public ManagerUserId: number;
+  public projectID: number;
+  public projectName: string;
+  public startDate: string;
+  public endDate: string;
+  public priority: number;
+  public managerUserId: number;
   // Project related Variables End
   modalRef: BsModalRef;
   public Ischecked = false;
@@ -62,25 +62,24 @@ export class AddProjectComponent implements OnInit {
   }
 
   trackUser(index: number, item: any) {
-    return item ? item.UserId : undefined;
+    return item ? item.userID : undefined;
   }
 
   trackProject(index: number, item: any) {
-    return item ? item.ProjectId : undefined;
+    return item ? item.ProjectID : undefined;
   }
   SearchFilter(Searchdetail: string): void {
-    if (Searchdetail !== undefined && Searchdetail.length !== 0) {
-      // tslint:disable-next-line:max-line-length
+    if (Searchdetail !== undefined && Searchdetail.length !== 0) {      
       this._service
         .GetAllUsers()
         .subscribe(
           data =>
             (this.listManager = data.filter(
               item =>
-                item.FirstName.toUpperCase() === Searchdetail.toUpperCase() ||
-                item.LastName.toUpperCase() === Searchdetail.toUpperCase() ||
-                item.EmployeeId.toUpperCase() === Searchdetail.toUpperCase() ||
-                item.UserId.toString() === Searchdetail
+                item.firstName.toUpperCase() === Searchdetail.toUpperCase() ||
+                item.lastName.toUpperCase() === Searchdetail.toUpperCase() ||
+                item.employeeID.toUpperCase() === Searchdetail.toUpperCase() ||
+                item.userID.toString() === Searchdetail
             ))
         );
     } else {
@@ -92,29 +91,28 @@ export class AddProjectComponent implements OnInit {
     if (
       projectSearchCriteria !== undefined &&
       projectSearchCriteria.length !== 0
-    ) {
-      // tslint:disable-next-line:max-line-length
+    ) {    
       this._service
         .GetAllProjects()
         .subscribe(
           data =>
             (this.listProjects = data.filter(
               item =>
-                this.datepipe.transform(item.StartDate, 'yyyy-MM-dd') ===
+                this.datepipe.transform(item.startDate, 'yyyy-MM-dd') ===
                 this.datepipe.transform(
                   projectSearchCriteria,
                   'yyyy-MM-dd'
                 ) ||
-                this.datepipe.transform(item.EndDate, 'yyyy-MM-dd') ===
+                this.datepipe.transform(item.endDate, 'yyyy-MM-dd') ===
                 this.datepipe.transform(
                   projectSearchCriteria,
                   'yyyy-MM-dd'
                 ) ||
-                item.ProjectId.toString() === projectSearchCriteria ||
-                item.ProjectDescription.toUpperCase() ===
+                item.projectID.toString() === projectSearchCriteria ||
+                item.projectName.toUpperCase() ===
                 projectSearchCriteria.toUpperCase() ||
-                item.Priority.toString() === projectSearchCriteria ||
-                item.ManagerUserId.toString() === projectSearchCriteria
+                item.priority.toString() === projectSearchCriteria ||
+                item.managerUserId.toString() === projectSearchCriteria
             ))
         );
     } else {
@@ -127,9 +125,9 @@ export class AddProjectComponent implements OnInit {
     this._service.GetAllProjects().subscribe(
       data =>
         (this.listProjects = data.sort((a, b) => {
-          if (a.StartDate < b.StartDate) {
+          if (a.startDate < b.startDate) {
             return -1;
-          } else if (a.StartDate > b.StartDate) {
+          } else if (a.startDate > b.startDate) {
             return 1;
           } else {
             return 0;
@@ -141,9 +139,9 @@ export class AddProjectComponent implements OnInit {
     this._service.GetAllProjects().subscribe(
       data =>
         (this.listProjects = data.sort((a, b) => {
-          if (a.EndDate < b.EndDate) {
+          if (a.endDate < b.endDate) {
             return -1;
-          } else if (a.EndDate > b.EndDate) {
+          } else if (a.endDate > b.endDate) {
             return 1;
           } else {
             return 0;
@@ -155,9 +153,9 @@ export class AddProjectComponent implements OnInit {
     this._service.GetAllProjects().subscribe(
       data =>
         (this.listProjects = data.sort((a, b) => {
-          if (a.Priority < b.Priority) {
+          if (a.priority < b.priority) {
             return -1;
-          } else if (a.Priority > b.Priority) {
+          } else if (a.priority > b.priority) {
             return 1;
           } else {
             return 0;
@@ -166,58 +164,58 @@ export class AddProjectComponent implements OnInit {
     );
   }
   SelectManger(userIdManager: number): void {
-    this.ManagerUserId = userIdManager;
+    this.managerUserId = userIdManager;
     this.IsManagerSelected = true;
   }
 
   AddNewProject(form: NgForm): void {
     const Projectdetails: Project = {
-      ProjectId: 0,
-      ProjectDescription: this.ProjectDescription,
-      Priority: this.Priority,
-      ManagerUserId: this.ManagerUserId,
-      StartDate: '',
-      EndDate: ''
+      projectID: 0,
+      projectName: this.projectName,
+      priority: this.priority,
+      managerUserId: this.managerUserId,
+      startDate: '',
+      endDate: ''
     };
     if (this.Ischecked) {
-      Projectdetails.StartDate = this.StartDate;
-      Projectdetails.EndDate = this.EndDate;
+      Projectdetails.startDate = this.startDate;
+      Projectdetails.endDate = this.endDate;
     } else {
       this.ProjectDate = new Date();
-      Projectdetails.StartDate = this.ProjectDate.toString();
-      Projectdetails.EndDate = this.ProjectDate.setDate(
+      Projectdetails.startDate = this.ProjectDate.toString();
+      Projectdetails.endDate = this.ProjectDate.setDate(
         this.ProjectDate.getDate() + 1
       ).toString();
 
-      Projectdetails.StartDate = this.datepipe.transform(
-        Projectdetails.StartDate,
+      Projectdetails.startDate = this.datepipe.transform(
+        Projectdetails.startDate,
         'yyyy-MM-dd'
       );
-      Projectdetails.EndDate = this.datepipe.transform(
-        Projectdetails.EndDate,
+      Projectdetails.endDate = this.datepipe.transform(
+        Projectdetails.endDate,
         'yyyy-MM-dd'
       );
     }
     this.IsEdit = false;
     this.IsDeletedSuccessFully = false;
     this.IsUpdatedSuccessFully = false;
-    if (Projectdetails.Priority === undefined) {
-      Projectdetails.Priority = 15;
+    if (Projectdetails.priority === undefined) {
+      Projectdetails.priority = 15;
     }
     if (
-      Projectdetails.ProjectDescription === undefined ||
-      Projectdetails.ManagerUserId === undefined ||
-      Projectdetails.StartDate === undefined ||
-      Projectdetails.EndDate === undefined ||
-      Projectdetails.ProjectDescription === '' ||
-      Projectdetails.ManagerUserId === 0 ||
-      Projectdetails.StartDate === '' ||
-      Projectdetails.EndDate === ''
+      Projectdetails.projectName === undefined ||
+      Projectdetails.managerUserId === undefined ||
+      Projectdetails.startDate === undefined ||
+      Projectdetails.endDate === undefined ||
+      Projectdetails.projectName === '' ||
+      Projectdetails.managerUserId === 0 ||
+      Projectdetails.startDate === '' ||
+      Projectdetails.endDate === ''
     ) {
       this.IsformValid = false;
       this.IsAddedSuccessFully = false;
     } else if (
-      Date.parse(Projectdetails.StartDate) > Date.parse(Projectdetails.EndDate)
+      Date.parse(Projectdetails.startDate) > Date.parse(Projectdetails.endDate)
     ) {
       this.IsformValid = true;
       this.IsAddedSuccessFully = false;
@@ -241,39 +239,39 @@ export class AddProjectComponent implements OnInit {
     this.IsUpdatedSuccessFully = false;
     this.IsformValid = true;
     this.IsEdit = true;
-    this.ProjectId = _project.ProjectId;
-    this.ProjectDescription = _project.ProjectDescription;
-    this.Priority = _project.Priority;
-    this.StartDate = _project.StartDate;
-    this.EndDate = _project.EndDate;
-    this.ManagerUserId = _project.ManagerUserId;
+    this.projectID = _project.projectID;
+    this.projectName = _project.projectName;
+    this.priority = _project.priority;
+    this.startDate = _project.startDate;
+    this.endDate = _project.endDate;
+    this.managerUserId = _project.managerUserId;
     window.scroll(0, 0);
   }
   UpdateProject(): void {
     let updateResult: any;
     const Projectdetails: Project = {
-      ProjectId: this.ProjectId,
-      ProjectDescription: this.ProjectDescription,
-      Priority: this.Priority,
-      ManagerUserId: this.ManagerUserId,
-      StartDate: this.StartDate,
-      EndDate: this.EndDate
+      projectID: this.projectID,
+      projectName: this.projectName,
+      priority: this.priority,
+      managerUserId: this.managerUserId,
+      startDate: this.startDate,
+      endDate: this.endDate
     };
     if (
-      Projectdetails.ProjectDescription === undefined ||
-      Projectdetails.ManagerUserId === undefined ||
-      Projectdetails.StartDate === undefined ||
-      Projectdetails.EndDate === undefined ||
-      Projectdetails.ProjectDescription === '' ||
-      Projectdetails.Priority === 0 ||
-      Projectdetails.ManagerUserId === 0 ||
-      Projectdetails.StartDate === '' ||
-      Projectdetails.EndDate === ''
+      Projectdetails.projectName === undefined ||
+      Projectdetails.managerUserId === undefined ||
+      Projectdetails.startDate === undefined ||
+      Projectdetails.endDate === undefined ||
+      Projectdetails.projectName === '' ||
+      Projectdetails.priority === 0 ||
+      Projectdetails.managerUserId === 0 ||
+      Projectdetails.startDate === '' ||
+      Projectdetails.endDate === ''
     ) {
       this.IsformValid = false;
       this.IsUpdatedSuccessFully = false;
     } else if (
-      Date.parse(Projectdetails.StartDate) > Date.parse(Projectdetails.EndDate)
+      Date.parse(Projectdetails.startDate) > Date.parse(Projectdetails.endDate)
     ) {
       this.IsformValid = true;
       this.IsUpdatedSuccessFully = false;
@@ -281,7 +279,7 @@ export class AddProjectComponent implements OnInit {
     } else {
       this.IsformValid = true;
       this._service
-        .UpdateProjects(Projectdetails.ProjectId, Projectdetails)
+        .UpdateProjects(Projectdetails.projectID, Projectdetails)
         .subscribe(data => (updateResult = data));
       this.IsUpdatedSuccessFully = true;
       this.IsDeletedSuccessFully = false;

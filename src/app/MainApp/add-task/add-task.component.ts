@@ -1,6 +1,6 @@
 import { Component, NgModule, OnInit, TemplateRef } from '@angular/core';
 import { SharedService } from 'src/app/Services/shared.service';
-import { TaskInformation } from '../../Modules/task-information';
+import { Task } from '../../Modules/task-information';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { stringify } from '@angular/core/src/util';
@@ -19,22 +19,22 @@ import { Project } from 'src/app/Modules/project';
 @Component({
   selector: 'app-add-task',
   templateUrl: './add-task.component.html',
-  styleUrls: ['./add-task.component.scss']
+  styleUrls: ['./add-task.component.css']
 })
 
 export class AddTaskComponent implements OnInit {
 
 
   // Task Properties Details Start
-  public TaskId: number;
-  public TaskDescription: string;
-  public ParentId: number;
-  public StartDate: string;
-  public EndDate: string;
-  public Priority: number;
-  public TaskStatus: string;
-  public UserId: number;
-  public ProjectId: number;
+  public taskID: number;
+  public taskName: string;
+  public parentID: number;
+  public startDate: string;
+  public endDate: string;
+  public priority: number;
+  public taskStatus: string;
+  public userID: number;
+  public projectID: number;
   // Task Properties Details Start
   // List Objects Holder Start
   listProjects: Project[];
@@ -70,9 +70,9 @@ export class AddTaskComponent implements OnInit {
   this.IsParentAddedSuccessFully = false;
 
     if (this.Ischecked) {
-      const ParentTaskDetails: ParentTask = { ParentId: 0, ParentTask1: this.TaskDescription };
+      const ParentTaskDetails: ParentTask = { parentID: 0, parentTaskName: this.taskName };
 
-      if (ParentTaskDetails.ParentTask1 === undefined || ParentTaskDetails.ParentTask1 === '') {
+      if (ParentTaskDetails.parentTaskName === undefined || ParentTaskDetails.parentTaskName === '') {
         this.IsformValid = false;
       } else {
         this.IsformValid = true;
@@ -82,26 +82,25 @@ export class AddTaskComponent implements OnInit {
       }
 
     } else {
-      const Taskdetails: TaskInformation = {
-        TaskId: 0,
-        ParentId: this.ParentId,
-        TaskDescription: this.TaskDescription,
-        StartDate: this.StartDate,
-        EndDate: this.EndDate,
-        Priority: this.Priority,
-        IsTaskCompleted: 0,
-        ProjectId: this.ProjectId,
-        UserId: this.UserId
+      const Taskdetails: Task = {
+        taskID: 0,
+        parentID: this.parentID,
+        taskName: this.taskName,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        priority: this.priority,
+        status: 0,
+        projectID: this.projectID,
+        userID: this.userID
       };
-      if (Taskdetails.Priority === undefined) {
-        Taskdetails.Priority = 15;
-      }
-      // tslint:disable-next-line:max-line-length
-      if (Taskdetails.TaskDescription === undefined || Taskdetails.ParentId === undefined || Taskdetails.StartDate === undefined || Taskdetails.EndDate === undefined
-        || Taskdetails.ProjectId === undefined || Taskdetails.UserId === undefined
-        || Taskdetails.TaskDescription.length === 0) {
+      if (Taskdetails.priority === undefined) {
+        Taskdetails.priority = 15;
+      }      
+      if (Taskdetails.taskName === undefined || Taskdetails.parentID === undefined || Taskdetails.startDate === undefined || Taskdetails.endDate === undefined
+        || Taskdetails.projectID === undefined || Taskdetails.userID === undefined
+        || Taskdetails.taskName.length === 0) {
         this.IsformValid = false;
-      } else if (Date.parse(Taskdetails.StartDate) > Date.parse(Taskdetails.EndDate)) {
+      } else if (Date.parse(Taskdetails.startDate) > Date.parse(Taskdetails.endDate)) {
         this.IsformValid = true;
         this.IsAddedSuccessFully = false;
         this.IsStartDateGreater = true;
@@ -131,12 +130,12 @@ export class AddTaskComponent implements OnInit {
   }
 
   SelectProject(ProjectId: number): void {
-    this.ProjectId = ProjectId;
+    this.projectID = ProjectId;
     this.IsProjectSelected = true;
   }
 
   SelectParentTask(ParentId: number): void {
-    this.ParentId = ParentId;
+    this.parentID = ParentId;
     this.IsParentTaskSelected = true;
 
   }
@@ -149,10 +148,10 @@ export class AddTaskComponent implements OnInit {
   SearchProjectFilter(projectSearchCriteria: string): void {
     if (projectSearchCriteria !== undefined && projectSearchCriteria.length !== 0) {
       // tslint:disable-next-line:max-line-length
-      this._service.GetAllProjects().subscribe(data => this.listProjects = data.filter(item => this.datepipe.transform(item.StartDate, 'yyyy-MM-dd') === this.datepipe.transform(projectSearchCriteria, 'yyyy-MM-dd') || this.datepipe.transform(item.EndDate, 'yyyy-MM-dd') === this.datepipe.transform(projectSearchCriteria, 'yyyy-MM-dd')
+      this._service.GetAllProjects().subscribe(data => this.listProjects = data.filter(item => this.datepipe.transform(item.startDate, 'yyyy-MM-dd') === this.datepipe.transform(projectSearchCriteria, 'yyyy-MM-dd') || this.datepipe.transform(item.endDate, 'yyyy-MM-dd') === this.datepipe.transform(projectSearchCriteria, 'yyyy-MM-dd')
         // tslint:disable-next-line:max-line-length
-        || item.ProjectId.toString() === projectSearchCriteria || item.ProjectDescription.toUpperCase() === projectSearchCriteria.toUpperCase()
-        || item.Priority.toString() === projectSearchCriteria || item.ManagerUserId.toString() === projectSearchCriteria));
+        || item.projectID.toString() === projectSearchCriteria || item.projectName.toUpperCase() === projectSearchCriteria.toUpperCase()
+        || item.priority.toString() === projectSearchCriteria || item.managerUserId.toString() === projectSearchCriteria));
 
     } else {
       this._service.GetAllProjects().subscribe(data => this.listProjects = data);
@@ -162,7 +161,7 @@ export class AddTaskComponent implements OnInit {
   SearchParentTaskFilter(ParentTaskSearchCriteria: string): void {
     if (ParentTaskSearchCriteria !== undefined && ParentTaskSearchCriteria.length !== 0) {
       // tslint:disable-next-line:max-line-length
-      this._service.GetAllParentTask().subscribe(data => this.listParentTask = data.filter(item => item.ParentId.toString() === ParentTaskSearchCriteria || item.ParentTask1.toUpperCase() === ParentTaskSearchCriteria.toUpperCase()));
+      this._service.GetAllParentTask().subscribe(data => this.listParentTask = data.filter(item => item.parentID.toString() === ParentTaskSearchCriteria || item.parentTaskName.toUpperCase() === ParentTaskSearchCriteria.toUpperCase()));
 
     } else {
       this._service.GetAllParentTask().subscribe(data => this.listParentTask = data);
@@ -183,11 +182,11 @@ export class AddTaskComponent implements OnInit {
   }
   trackProject(index: number, item: any) {
 
-    return item ? item.ProjectId : undefined;
+    return item ? item.ProjectID : undefined;
 
   }
   SelectUser(UserId: number): void {
-    this.UserId = UserId;
+    this.userID = UserId;
     this.IsUserSelected = true;
   }
   trackUser(index: number, item: any) {
@@ -198,8 +197,8 @@ export class AddTaskComponent implements OnInit {
   SearchUserFilter(Searchdetail: string): void {
     if (Searchdetail !== undefined && Searchdetail.length !== 0) {
       // tslint:disable-next-line:max-line-length
-      this._service.GetAllUsers().subscribe(data => this.listUser = data.filter(item => item.FirstName.toUpperCase() === Searchdetail.toUpperCase() || item.LastName.toUpperCase() === Searchdetail.toUpperCase()
-        || item.EmployeeId.toUpperCase() === Searchdetail.toUpperCase() || item.UserId.toString() === Searchdetail));
+      this._service.GetAllUsers().subscribe(data => this.listUser = data.filter(item => item.firstName.toUpperCase() === Searchdetail.toUpperCase() || item.lastName.toUpperCase() === Searchdetail.toUpperCase()
+        || item.employeeID.toUpperCase() === Searchdetail.toUpperCase() || item.userID.toString() === Searchdetail));
 
     } else {
       this._service.GetAllUsers().subscribe(data => this.listUser = data);

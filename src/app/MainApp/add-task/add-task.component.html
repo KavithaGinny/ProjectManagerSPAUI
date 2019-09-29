@@ -1,11 +1,12 @@
+<div style="width:1000px;margin:0 auto">
 <p>
   Add Task!
 </p>
-<h6 class="alert alert-danger" *ngIf="!IsformValid">All the below fields are mandatory..!</h6>
-  <h6 class="alert alert-success" *ngIf="IsAddedSuccessFully">Task added successfully...</h6>
-  <h6 class="alert alert-success" *ngIf="IsParentAddedSuccessFully">Parent Task added successfully...</h6>
-  <h6 class="alert alert-danger" *ngIf="IsStartDateGreater">Start date should not be greaterthan End date..!</h6>
-<table class="table table-striped" style="background-color:lightcyan;">
+<h6 class="alert alert-danger" *ngIf="!IsformValid">All the below fields are mandatory!</h6>
+  <h6 class="alert alert-success" *ngIf="IsAddedSuccessFully">Task added successfully</h6>
+  <h6 class="alert alert-success" *ngIf="IsParentAddedSuccessFully">Parent Task added successfully</h6>
+  <h6 class="alert alert-danger" *ngIf="IsStartDateGreater">Start date should not be greaterthan End date!</h6>
+<table class="table table-striped" style="background-color:#f6f8d4;">
   <tbody>
     <tr>
       <td colspan="1">
@@ -15,13 +16,13 @@
                   <label class="col-md-4 control-label">Project Id:</label>
                   <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-               <input id="ProjectId" [(ngModel)]="ProjectId"   name="ProjectId"  class="form-control" required="true"  disabled type="number" > <button [disabled]="Ischecked" style="float:right; padding:3px;" class="btn btn-secondary"  type="button" (click)="openProjectModal(tempProject)" ><i class="fa fa-search" aria-hidden="true"></i> Search</button> </div>
+               <input id="ProjectId" [(ngModel)]="projectID"   name="ProjectId"  class="form-control" required="true"  disabled type="number" > <button [disabled]="Ischecked" style="float:right; padding:3px;" class="btn btn-secondary"  type="button" (click)="openProjectModal(tempProject)" ><i class="fa fa-search" aria-hidden="true"></i> Search</button> </div>
                </div>
               </div>
             <div class="form-group">
               <label class="col-md-4 control-label">Task:</label>
               <div class="col-md-8 inputGroupContainer">
-                <div class="input-group"><input id="TaskDescription" [(ngModel)]="TaskDescription" name="TaskDescription" placeholder="Task Details"
+                <div class="input-group"><input id="TaskDescription" [(ngModel)]="taskName" name="TaskDescription" placeholder="Task Details"
                     class="form-control" required="true" value="" type="text"></div>
               </div>
             </div>
@@ -39,14 +40,14 @@
               <div class="col-md-8 inputGroupContainer">
                 <div class="input-group">
                   <label for="rangeval">{{ rangeval.value }}</label>
-                  <input id="Priority" #rangeval [(ngModel)]="Priority" name="Priority" class="form-control-range"
+                  <input id="Priority" #rangeval [(ngModel)]="priority" name="Priority" class="form-control-range"
                     required="true" value="" type="range" min="0" max="60"></div>
               </div>
             </div>
             <div class="form-group">
               <label class="col-md-4 control-label">Parent Task Id:</label>
               <div class="col-md-8 inputGroupContainer">
-                 <div class="input-group"><input id="ParentTask" [disabled]="Ischecked" [(ngModel)]="ParentId"  #ParentTask name="ParentTask" placeholder="Parent Task Id" readonly class="form-control" required="true" value="" type="number">
+                 <div class="input-group"><input id="ParentTask" [disabled]="Ischecked" [(ngModel)]="parentID"  #ParentTask name="ParentTask" placeholder="Parent Task Id" readonly class="form-control" required="true" value="" type="number">
                    <button [disabled]="Ischecked" style="float:right; padding:3px;" class="btn btn-secondary"  type="button" (click)="openParenttaskModal(tempParentTask)" ><i class="fa fa-search" aria-hidden="true"></i> search</button>   </div>
               </div>
            </div>
@@ -54,14 +55,14 @@
               <label class="col-md-4 control-label">Start Date:</label>
               <div class="col-md-8 inputGroupContainer">
                 <div class="input-group">
-                  <input id="StartDate" name="StartDate" [(ngModel)]="StartDate" class="form-control" required="true"
+                  <input id="StartDate" name="StartDate" [(ngModel)]="startDate" class="form-control" required="true"
                     value="" type="date"></div>
               </div>
             </div>
             <div class="form-group">
               <label class="col-md-4 control-label">End Date:</label>
               <div class="col-md-8 inputGroupContainer">
-                <div class="input-group"><input id="EndDate" name="EndDate" [(ngModel)]="EndDate" class="form-control"
+                <div class="input-group"><input id="EndDate" name="EndDate" [(ngModel)]="endDate" class="form-control"
                     required="true" value="" type="date"></div>
               </div>
             </div>
@@ -69,7 +70,7 @@
               <label class="col-md-4 control-label">UserId:</label>
               <div class="col-md-8 inputGroupContainer">
                   <div class="input-group">
-           <input id="UserId" [(ngModel)]="UserId"   name="UserId"  class="form-control" required="true" readonly  disabled type="number" > <button [disabled]="Ischecked" style="float:right; padding:3px;" class="btn btn-secondary"  type="button" (click)="openUserModal(tempUser)" ><i class="fa fa-search" aria-hidden="true"></i> search</button>    </div>
+           <input id="UserId" [(ngModel)]="userID"   name="UserId"  class="form-control" required="true" readonly  disabled type="number" > <button [disabled]="Ischecked" style="float:right; padding:3px;" class="btn btn-secondary"  type="button" (click)="openUserModal(tempUser)" ><i class="fa fa-search" aria-hidden="true"></i> search</button>    </div>
            </div>
           </div>
             <div style="padding:20px">
@@ -96,7 +97,7 @@
 <span aria-hidden="true">&times;</span>
     </div>
     <div class="modal-body">
-       <h6 class="text text-success" *ngIf="IsProjectSelected">Project is selected successfully...</h6>
+       <h6 class="text text-success" *ngIf="IsProjectSelected">Project is selected successfully!</h6>
        <div class="row">
            <div class="col-md-6">
               <div class="input-group"><input id="txtSearchProject" name="txtSearchProject" #txtSearchProject (keyup)="SearchProjectFilter(txtSearchProject.value)"  placeholder="Search..." class="form-control"  value="" type="text">
@@ -117,11 +118,11 @@
                   </thead>
                   <tbody>
                       <tr *ngFor ="let item of listProjects ; trackBy: trackProject" >
-                        <td>{{item.ProjectId}}</td>
-                        <td>{{item.ProjectDescription}}</td>
-                        <td>{{item.Priority}}</td>
-                        <td>{{item.ManagerUserId }}</td>
-                        <td style="padding-left:0;padding-right:0; margin: 0%"><button style="padding:0px;" class="btn btn-success" (click)="SelectProject(item.ProjectId)"  >Select</button></td>
+                        <td>{{item.projectID}}</td>
+                        <td>{{item.projectName}}</td>
+                        <td>{{item.priority}}</td>
+                        <td>{{item.managerUserId }}</td>
+                        <td style="padding-left:0;padding-right:0; margin: 0%"><button style="padding:0px;" class="btn btn-success" (click)="SelectProject(item.projectID)"  >Select</button></td>
                       </tr>
                     </tbody>
                   </table>
@@ -137,7 +138,7 @@
   <span aria-hidden="true">&times;</span>
        </div>
        <div class="modal-body">
-          <h6 class="text text-success" *ngIf="IsParentTaskSelected">Parent task is selected successfully...</h6>
+          <h6 class="text text-success" *ngIf="IsParentTaskSelected">Parent task is selected successfully!</h6>
           <div class="row">
               <div class="col-md-6">
                  <div class="input-group"><input id="txtSearchParentTask" name="txtSearchParentTask" #txtSearchParentTask (keyup)="SearchParentTaskFilter(txtSearchParentTask.value)"  placeholder="Search..." class="form-control"  value="" type="text"></div>
@@ -155,9 +156,9 @@
                      </thead>
                      <tbody>
                          <tr *ngFor ="let item of listParentTask ; trackBy: trackParentTask" >
-                           <td>{{item.ParentId}}</td>
-                           <td>{{item.ParentTask1}}</td>
-                           <td style="padding-left:0;padding-right:0; margin: 0%"><button style="padding:0px;" class="btn btn-success" (click)="SelectParentTask(item.ParentId)"  >Select</button></td>
+                           <td>{{item.parentID}}</td>
+                           <td>{{item.parentTaskName}}</td>
+                           <td style="padding-left:0;padding-right:0; margin: 0%"><button style="padding:0px;" class="btn btn-success" (click)="SelectParentTask(item.parentID)"  >Select</button></td>
                          </tr>
                        </tbody>
                      </table>
@@ -171,7 +172,7 @@
      <span aria-hidden="true">&times;</span>
           </div>
           <div class="modal-body">
-             <h6 class="text text-success" *ngIf="IsUserSelected">User userId is selected successfully...</h6>
+             <h6 class="text text-success" *ngIf="IsUserSelected">User userId is selected successfully!</h6>
              <div class="row">
                  <div class="col-md-6">
                     <div class="input-group"><input id="txtSearchUser" name="txtSearchUser" #txtSearchUser (keyup)="SearchUserFilter(txtSearchUser.value)"  placeholder="Search..." class="form-control"  value="" type="text"></div>
@@ -191,14 +192,15 @@
                    </thead>
                    <tbody>
                        <tr *ngFor ="let item of listUser ; trackBy: trackUser" >
-                         <td>{{item.UserId}}</td>
-                         <td>{{item.FirstName}}</td>
-                         <td>{{item.LastName}}</td>
-                         <td>{{item.EmployeeId}}</td>
-                         <td style="padding-left:0;padding-right:0; margin: 0%"><button style="padding:0px;" class="btn btn-success" (click)="SelectUser(item.UserId)"  >Select</button></td>
+                         <td>{{item.userID}}</td>
+                         <td>{{item.firstName}}</td>
+                         <td>{{item.lastName}}</td>
+                         <td>{{item.employeeID}}</td>
+                         <td style="padding-left:0;padding-right:0; margin: 0%"><button style="padding:0px;" class="btn btn-success" (click)="SelectUser(item.userID)"  >Select</button></td>
                        </tr>
                      </tbody>
                    </table>
 
           </div>
          </ng-template>
+        </div>

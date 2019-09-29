@@ -1,12 +1,12 @@
-export class TaskInformation {
-    TaskId: number;
-    ParentId: number;
-    TaskDescription: string;
-    StartDate: string;
-    EndDate: string;
-    Priority: number;
-    IsTaskCompleted: number;
-    UserId: number;
-    ProjectId: number;
+export class Task {
+    taskID: number;
+    parentID: number;
+    taskName: string;
+    startDate: string;
+    endDate: string;
+    priority: number;
+    status: number;
+    userID: number;
+    projectID: number;
 }
 

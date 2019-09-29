@@ -113,16 +113,16 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of tasks; trackBy: TrackTask">
-        <td >{{ item.TaskId }}</td>
-        <td >{{ item.TaskDescription }}</td>
-        <td> {{ item.ParentId }}</td>
-        <td >{{ item.ProjectId }}</td>
-        <td >{{ item.Priority }}</td>
-        <td >{{ item.StartDate | date: "MM-dd-yyyy" }}</td>
-        <td>{{ item.EndDate | date: "MM-dd-yyyy" }}</td>
-        <td >{{ item.UserId }}</td>
+        <td >{{ item.taskID }}</td>
+        <td >{{ item.taskName }}</td>
+        <td> {{ item.parentID }}</td>
+        <td >{{ item.projectID }}</td>
+        <td >{{ item.priority }}</td>
+        <td >{{ item.startDate | date: "MM-dd-yyyy" }}</td>
+        <td>{{ item.endDate | date: "MM-dd-yyyy" }}</td>
+        <td >{{ item.userID }}</td>
         <td style="padding-left:0;padding-right:0;">
-          <a routerLink="/update-task/{{ item.TaskId }}"
+          <a routerLink="/update-task/{{ item.taskID }}"
             ><button
               class="btn btn-primary"
               [disabled]="item.IsTaskCompleted == 1"
@@ -134,7 +134,7 @@
   
         <td style="padding-left:0;padding-right:0">
           <button
-            [disabled]="item.IsTaskCompleted == 1"
+            [disabled]="item.status == 1"
             (click)="CompleteTaskFlagchange(item)"
             class="btn btn-warning"
           >
@@ -143,14 +143,14 @@
         </td>
         <td style="padding-left:0;padding-right:0">
           <button
-            [disabled]="item.IsTaskCompleted == 1"
-            (click)="DeleteTask(item.TaskId)"
+            [disabled]="item.status == 1"
+            (click)="DeleteTask(item.taskID)"
             class="btn btn-danger"
           >
             <i class="fa fa-trash" aria-hidden="true"></i> Delete
           </button>
         </td>
-        <td>{{ item.IsTaskCompleted == 1 ? "Yes" : "No" }}</td>
+        <td>{{ item.status == 1 ? "Yes" : "No" }}</td>
       </tr>
     </tbody>
   </table>
