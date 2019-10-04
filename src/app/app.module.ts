@@ -12,6 +12,7 @@ import { UpdateTaskComponent } from './MainApp/update-task/update-task.component
 import {ModalModule} from 'ngx-bootstrap/modal';
 import {  DatePipe} from '@angular/common';
 import {SharedService} from './Services/shared.service';
+import { RouterLinkDirectiveStub } from './testing/router-link-directive-stub';
 
 
 @NgModule({
@@ -21,7 +22,9 @@ import {SharedService} from './Services/shared.service';
     AddUserComponent,
     AddTaskComponent,
     ViewTaskComponent,
-    UpdateTaskComponent
+    UpdateTaskComponent,
+    RouterLinkDirectiveStub
+
   ],
   imports: [
     BrowserModule,

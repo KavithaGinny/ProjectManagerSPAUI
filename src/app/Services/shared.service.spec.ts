@@ -8,6 +8,9 @@ describe('SharedService', () => {
   it('should be created', () => {
     const service: SharedService = TestBed.get(SharedService);
 
-    expect(service).toBeTruthy();
+    expect(SharedService).toBeTruthy();
   });
+});
+afterAll(() => {
+  TestBed.resetTestingModule();
 });

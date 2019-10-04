@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddTaskComponent } from './add-task.component';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
+import { DatePipe } from '@angular/common';
 
 describe('AddTaskComponent', () => {
   let component: AddTaskComponent;
@@ -8,7 +12,9 @@ describe('AddTaskComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddTaskComponent ]
+      imports:[ FormsModule,ModalModule.forRoot(),HttpClientModule],
+      declarations: [ AddTaskComponent ],
+      providers:[BsModalService,DatePipe]
     })
     .compileComponents();
   }));
@@ -20,6 +26,9 @@ describe('AddTaskComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(AddTaskComponent).toBeTruthy();
+  });
+  afterAll(() => {
+    TestBed.resetTestingModule();
   });
 });

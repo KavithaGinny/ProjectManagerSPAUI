@@ -1,6 +1,13 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { Component, NgModule } from '@angular/core';
+import { RouterLinkDirectiveStub } from './testing/router-link-directive-stub';
+import { DatePipe } from '@angular/common';
+
+
+@Component({selector: 'router-outlet', template: ''})
+class RouterOutletStubComponent { }
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -9,7 +16,9 @@ describe('AppComponent', () => {
         RouterTestingModule
       ],
       declarations: [
-        AppComponent
+        AppComponent,
+        RouterLinkDirectiveStub,
+        RouterOutletStubComponent
       ],
     }).compileComponents();
   }));
